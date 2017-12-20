@@ -1,6 +1,6 @@
 # GenRA
 
-This repository contains the code for (GenRA)[https://doi.org/10.1016/j.yrtph.2016.05.008] analysis tools.  
+This repository contains the code for [https://doi.org/10.1016/j.yrtph.2016.05.008](GenRA) analysis tools.  
 
 
 # Installation
