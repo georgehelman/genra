@@ -63,8 +63,8 @@ def searchFP(sid,fp='chm_mrgn',DB=None,sel_by=None,**kwargs):
     if not (ds and col): return
 
     SID_h= None
-    if sel_by and COL.has_key(sel_by):
-        col_sel =COL.get(sel_by)    
+    if sel_by:
+        col_sel,_ = getColFPMap(sel_by)    
         SID_h = DB[col_sel].find({'dsstox_sid':{'$exists':1}}).distinct('dsstox_sid')
         if sid not in SID_h: SID_h.append(sid)
 

@@ -16,8 +16,8 @@ import os
 
 
 # Set up the local source files
-TOP = '/'.join(os.getcwd().split('/')[:-2])+'/'
-#TOP = "/share/home/ishah/ipynb/pb/HTTR_WF/"
+#TOP = '/'.join(os.getcwd().split('/')[:-2])+'/'
+TOP = "/share/home/ishah/ipynb/chiron/genra-analysis/"
 
 LIB = TOP+'lib'
 if not LIB in sys.path: 
