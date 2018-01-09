@@ -4,6 +4,15 @@ from scipy.spatial.distance import squareform,pdist
 from db.fpsim import *
 from db.getfp import *
 
+
+def saveRunGenRA(sid,col_save=None,DB=None,**kwargs):
+    
+    Y = runGenRA(sid,DB=DB,**kwargs)
+    
+    if Y:
+        DB[col_save].insert_many(Y)
+
+    
 def runGenRA(sid,Y=None,SID=None,DB=None,
              fp_x='chm_mrgn',fp_y='toxp_txrf',
              sel_by=None,
