@@ -1,6 +1,11 @@
-from lib.queries import get_new_chemicals,get_measured_properties,get_predicted_properties,get_synonyms
+import os
+import sys
 import pymongo
-from lib.functions import *
+TOP = '/'.join(os.getcwd().split('/')[:-1])+'/'
+LIB = TOP+'lib'
+sys.path.insert(0,LIB)
+from utl.queries import get_new_chemicals,get_measured_properties,get_predicted_properties,get_synonyms
+from db.etl import *
 
 mysql_cnx = mysql.connector.connect(option_files='/share/home/ghelman/.my.cnf')
 
