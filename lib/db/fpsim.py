@@ -10,7 +10,7 @@ from db.mongo import *
 def searchCollByFP(sid,s0=0.5,col='chm_fp',fpn='mrgn',
                    SID=None,
                    i1=0,i2=None,dbg=False,DB=None,
-                   max_hits=100):
+                   max_hits=None):
     Q0 = DB[col].find_one({'dsstox_sid':sid})
     if not Q0: return
     C = DB.compound.find_one({'dsstox_sid':Q0['dsstox_sid']})
@@ -43,8 +43,10 @@ def searchCollByFP(sid,s0=0.5,col='chm_fp',fpn='mrgn',
         },
         {'$match':{'jaccard':{'$gte':s0}}},
         {'$sort': {'jaccard':-1}},
-        {'$limit': max_hits+1}, #Target always has 1 similarity to itself
     ]
+    if max_hits:
+        max_hits+=1 #Target always has 1 similarity to itself
+        Agg = Agg.append({'$limit': max_hits})
 
     #print qmin,qmax
     return list(DB[col].aggregate(Agg))

@@ -75,6 +75,7 @@ def get_pods():
 	    "JOIN tg_effect USING (tg_effect_id) "\
 	    "JOIN effect USING (effect_id) "\
 	    "JOIN endpoint USING (endpoint_id) "\
+        "JOIN effect_profile_group USING (group_id,effect_profile_id)
 	    "WHERE study_id is null"    
 
 def get_bmds():
