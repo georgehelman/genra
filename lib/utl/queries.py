@@ -59,7 +59,7 @@ def get_cid_from_sid(sid):
             "WHERE dsstox_substance_id='" + sid + "'"
             
 def get_studies():
-    return "SELECT pod_type,qualifier,pod_value,pod_unit,dose_level,max_dose_level, staggered_dosing, dsstox_substance_id AS dsstox_sid, casrn, preferred_name AS name, life_stage, endpoint_category, endpoint_type, endpoint_target, study_citation, study_year, study_source, data_entry_status,data_entry_level,data_usability,study_type,study_type_guideline,species,strain,admin_route,admin_method,substance_source_name,substance_purity,substance_lot_batch,substance_comment,dose_start,dose_start_unit,dose_end,dose_end_unit,study_comment,processed,ce_eval,fc_adjusted,study_file,received,batch_name "\
+    return "SELECT * "\
 	    "FROM pod JOIN pod_tg_effect USING (pod_id) "\
             "JOIN chemical USING (chemical_id) "\
             "JOIN tg_effect USING (tg_effect_id) "\
@@ -69,17 +69,17 @@ def get_studies():
             "WHERE study_id is not null"
             
 def get_pods():
-    return "SELECT pod_type,qualifier,pod_value,pod_unit,dose_level,max_dose_level, staggered_dosing, dsstox_substance_id AS dsstox_sid, casrn, preferred_name AS name, life_stage, endpoint_category, endpoint_type, endpoint_target "\
+    return "SELECT * "\
 	    "FROM pod JOIN pod_tg_effect USING (pod_id) "\
 	    "JOIN chemical USING (chemical_id) "\
 	    "JOIN tg_effect USING (tg_effect_id) "\
 	    "JOIN effect USING (effect_id) "\
 	    "JOIN endpoint USING (endpoint_id) "\
-        "JOIN effect_profile_group USING (group_id,effect_profile_id)
+        "JOIN effect_profile_group USING (group_id,effect_profile_id)"\
 	    "WHERE study_id is null"    
 
 def get_bmds():
-    return "SELECT dsstox_substance_id AS dsstox_sid, casrn, preferred_name AS name, endpoint_category, endpoint_type, endpoint_target, dataset_id,doses_dropped,model_name,model_version,has_output,BMD,BMDL,BMDU,CSF,AIC,pvalue1,pvalue2,pvalue3,pvalue4,Chi2,df,residual_of_interest,warnings,logic_bin,logic_cautions,logic_warnings,logic_failures,recommended,recommended_variable,bmr,bmr_type,study_citation, study_year, study_source, data_entry_status,data_entry_level,data_usability,study_type,study_type_guideline,species,strain,admin_route,admin_method,substance_source_name,substance_purity,substance_lot_batch,substance_comment,dose_start,dose_start_unit,dose_end,dose_end_unit,study_comment,processed,ce_eval,fc_adjusted,study_file,received,batch_name "\
+    return "SELECT *"\
 	    "FROM bmd_models JOIN study USING (study_id) "\
 	    "JOIN chemical USING (chemical_id) "\
 	    "JOIN endpoint USING (endpoint_id)"
