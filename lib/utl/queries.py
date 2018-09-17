@@ -2,7 +2,6 @@ dsstox='ro_stg_dsstox'
 chemprop='ro_stg_chemprop'
 qsar='ro_stg_qsar'
 invitrodb='dev_invitrodb'
-toxref='dev_toxref_2_0'
 
 
 def get_new_chemicals(l):
@@ -35,16 +34,13 @@ def get_synonyms(sid):
            "INNER JOIN " + dsstox +".generic_substances ON synonyms.fk_generic_substance_id = generic_substances.id " \
            "WHERE dsstox_substance_id='" + sid + "'"
 
-def get_invitrodb(l):
-    in_list= '("'+'","'.join(l)+'")'
-    return  "SELECT l5id, level4.l4id, dsstox_substance_id AS dsstox_sid, c_casrn_id AS cas, preferred_name AS name, modl, hitc, fitc, coff, actp, modl_er, modl_tp, modl_ga, modl_gw, modl_la, modl_lw, modl_prob, modl_rmse, modl_acc, modl_acb, modl_ac10, bmad, resp_max, resp_min, max_mean, max_mean_conc, max_med, max_med_conc, logc_max, logc_min, cnst, hill, hcov, gnls, gcov, cnst_er, cnst_aic, cnst_rmse, cnst_prob, hill_tp, hill_tp_sd, hill_ga, hill_ga_sd, hill_gw, hill_gw_sd, hill_er, hill_er_sd, hill_aic, hill_rmse, hill_prob, gnls_tp, gnls_tp_sd, gnls_ga, gnls_ga_sd, gnls_gw, gnls_gw_sd, gnls_la, gnls_la_sd, gnls_lw, gnls_lw_sd, gnls_er,gnls_er_sd, gnls_aic, gnls_rmse, gnls_prob, nconc, npts, nrep, nmed_gtbl, tmpi"\
-            " FROM " + invitrodb + ".level5"\
+def get_invitrodb():
+    return  "SELECT dsstox_substance_id AS dsstox_sid, c_casrn_id AS cas, preferred_name AS name, modl, hitc, fitc, coff, actp, modl_er, modl_tp, modl_ga, modl_gw, modl_la, modl_lw, modl_prob, modl_rmse, modl_acc, modl_acb, modl_ac10, bmad, resp_max, resp_min, max_mean, max_mean_conc, max_med, max_med_conc, logc_max, logc_min, cnst, hill, hcov, gnls, gcov, cnst_er, cnst_aic, cnst_rmse, cnst_prob, hill_tp, hill_tp_sd, hill_ga, hill_ga_sd, hill_gw, hill_gw_sd, hill_er, hill_er_sd, hill_aic, hill_rmse, hill_prob, gnls_tp, gnls_tp_sd, gnls_ga, gnls_ga_sd, gnls_gw, gnls_gw_sd, gnls_la, gnls_la_sd, gnls_lw, gnls_lw_sd, gnls_er,gnls_er_sd, gnls_aic, gnls_rmse, gnls_prob, nconc, npts, nrep, nmed_gtbl, tmpi"\
+            " FROM " + invitrodb + " .level5"\
             " INNER JOIN " + invitrodb + ".level4 ON level4.l4id=level5.l4id"\
             " INNER JOIN " + invitrodb + ".sample ON level4.spid=sample.sa_sample_id"\
             " INNER JOIN " + invitrodb + ".casrn ON sample.sa_gsid=casrn.c_gsid_id"\
-            " INNER JOIN " + dsstox + ".generic_substances ON casrn.c_gsid_id=generic_substances.id"\
-            " WHERE l5id NOT IN " + in_list
-
+            " INNER JOIN ro_stg_dsstox.generic_substances ON casrn.c_casrn_id=generic_substances.casrn"
 
 def get_sid_from_cid(cid):
     return "SELECT dsstox_substance_id AS dsstox_sid FROM " + dsstox + ".generic_substances " \
@@ -57,29 +53,3 @@ def get_cid_from_sid(sid):
             "INNER JOIN " + dsstox + ".generic_substance_compounds ON generic_substances.id = generic_substance_compounds.fk_generic_substance_id " \
             "INNER JOIN " + dsstox + ".compounds ON compounds.id = generic_substance_compounds.fk_compound_id " \
             "WHERE dsstox_substance_id='" + sid + "'"
-            
-def get_studies():
-    return "SELECT * "\
-	    "FROM pod JOIN pod_tg_effect USING (pod_id) "\
-            "JOIN chemical USING (chemical_id) "\
-            "JOIN tg_effect USING (tg_effect_id) "\
-            "JOIN effect USING (effect_id) "\
-            "JOIN endpoint USING (endpoint_id) "\
-	    "JOIN study using (study_id) "\
-            "WHERE study_id is not null"
-            
-def get_pods():
-    return "SELECT * "\
-	    "FROM pod JOIN pod_tg_effect USING (pod_id) "\
-	    "JOIN chemical USING (chemical_id) "\
-	    "JOIN tg_effect USING (tg_effect_id) "\
-	    "JOIN effect USING (effect_id) "\
-	    "JOIN endpoint USING (endpoint_id) "\
-        "JOIN effect_profile_group USING (group_id,effect_profile_id)"\
-	    "WHERE study_id is null"    
-
-def get_bmds():
-    return "SELECT *"\
-	    "FROM bmd_models JOIN study USING (study_id) "\
-	    "JOIN chemical USING (chemical_id) "\
-	    "JOIN endpoint USING (endpoint_id)"

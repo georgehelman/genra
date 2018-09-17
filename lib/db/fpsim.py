@@ -43,6 +43,7 @@ def searchCollByFP(sid,s0=0.5,col='chm_fp',fpn='mrgn',
         },
         {'$match':{'jaccard':{'$gte':s0}}},
         {'$sort': {'jaccard':-1}},
+        {'$limit': max_hits+1}, #Target always has 1 similarity to itself
     ]
     if max_hits:
         max_hits+=1 #Target always has 1 similarity to itself
