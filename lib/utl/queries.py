@@ -2,7 +2,8 @@ databases={
     'dsstox':'ro_stg_dsstox',
     'chemprop':'ro_stg_chemprop',
     'qsar':'ro_stg_qsar',
-    'invitrodb':'dev_invitrodb'
+    'invitrodb':'dev_invitrodb',
+    'toxref':'sbox_swatford_toxrefdb_2_0_snapshot'
 }
 
 
@@ -63,3 +64,24 @@ def get_lists():
         join {dsstox}.source_generic_substance_mappings as bc on b.id=bc.fk_source_substance_id \
         join {dsstox}.generic_substances as c on bc.fk_generic_substance_id=c.id \
         join {dsstox}.list_types as d on a.fk_list_type_id=d.id".format(**databases)
+    
+def get_chemical_level_pods():
+    return "SELECT dsstox_substance_id as dsstox_sid,casrn,preferred_name,pod_type,qualifier,pod_value,pod_unit,mg_kg_day_value,dose_level,max_dose_level,group_name,endpoint_category FROM {toxref}.pod\
+        JOIN {toxref}.chemical on pod.chemical_id=chemical.chemical_id\
+        JOIN {toxref}.effect_profile_group on pod.effect_profile_id=effect_profile_group.effect_profile_group_id\
+        JOIN {toxref}.pod_tg_effect on pod.pod_id=pod_tg_effect.pod_id\
+        JOIN {toxref}.tg_effect on pod_tg_effect.tg_effect_id=tg_effect.tg_effect_id\
+        JOIN {toxref}.effect on tg_effect.effect_id=effect.effect_id\
+        JOIN {toxref}.endpoint on effect.endpoint_id=endpoint.endpoint_id\
+        WHERE effect_profile_group_id=2 and study_id is null".format(**databases)
+    
+def get_study_level_pods():
+    return "SELECT dsstox_substance_id as dsstox_sid,casrn,preferred_name,pod_type,qualifier,pod_value,pod_unit,mg_kg_day_value,dose_level,max_dose_level,group_name,endpoint_category,study_type,species,strain_group,admin_route,admin_method FROM {toxref}.pod\
+        JOIN {toxref}.study on pod.study_id=study.study_id\
+        JOIN {toxref}.chemical on pod.chemical_id=chemical.chemical_id\
+        JOIN {toxref}.effect_profile_group on pod.effect_profile_id=effect_profile_group.effect_profile_group_id\
+        JOIN {toxref}.pod_tg_effect on pod.pod_id=pod_tg_effect.pod_id\
+        JOIN {toxref}.tg_effect on pod_tg_effect.tg_effect_id=tg_effect.tg_effect_id\
+        JOIN {toxref}.effect on tg_effect.effect_id=effect.effect_id\
+        JOIN {toxref}.endpoint on effect.endpoint_id=endpoint.endpoint_id\
+        WHERE effect_profile_group_id=2".format(**databases)
