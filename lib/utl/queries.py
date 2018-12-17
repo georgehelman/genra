@@ -85,3 +85,36 @@ def get_study_level_pods():
         JOIN {toxref}.effect on tg_effect.effect_id=effect.effect_id\
         JOIN {toxref}.endpoint on effect.endpoint_id=endpoint.endpoint_id\
         WHERE effect_profile_group_id=2".format(**databases)
+
+
+
+def deduped_study_level_pods():
+    return "SELECT dsstox_substance_id AS dsstox_sid,\
+casrn,preferred_name,pod_type,qualifier,pod_value,pod_unit,mg_kg_day_value,\
+dose_level,max_dose_level,group_name,study_type,species,\
+strain_group,admin_route,admin_method,endpoint_category,pod.pod_id \
+        FROM {toxref}.pod JOIN {toxref}.study on pod.study_id=study.study_id \
+        JOIN {toxref}.chemical on pod.chemical_id=chemical.chemical_id \
+        JOIN {toxref}.effect_profile_group on pod.effect_profile_id=effect_profile_group.effect_profile_group_id \
+        JOIN {toxref}.pod_tg_effect on pod.pod_id=pod_tg_effect.pod_id \
+        JOIN {toxref}.tg_effect on pod_tg_effect.tg_effect_id=tg_effect.tg_effect_id \
+        JOIN {toxref}.effect on tg_effect.effect_id=effect.effect_id \
+        JOIN {toxref}.endpoint on effect.endpoint_id=endpoint.endpoint_id \
+        WHERE effect_profile_group_id=2 \
+        GROUP BY dsstox_substance_id,\
+        casrn,preferred_name,pod_type,qualifier,pod_value,pod_unit,mg_kg_day_value,\
+        dose_level,max_dose_level,group_name,study_type,species,\
+        strain_group,admin_route,admin_method,endpoint_category,pod.pod_id;".format(**databases)
+
+def deduped_chemical_level_pods():
+    return "SELECT dsstox_substance_id as dsstox_sid,casrn,preferred_name,pod_type,qualifier,pod_value,pod_unit,mg_kg_day_value,dose_level,max_dose_level,group_name,endpoint_category, pod.pod_id\
+        FROM {toxref}.pod JOIN {toxref}.chemical on pod.chemical_id=chemical.chemical_id\
+        JOIN {toxref}.effect_profile_group on pod.effect_profile_id=effect_profile_group.effect_profile_group_id\
+        JOIN {toxref}.pod_tg_effect on pod.pod_id=pod_tg_effect.pod_id\
+        JOIN {toxref}.tg_effect on pod_tg_effect.tg_effect_id=tg_effect.tg_effect_id\
+        JOIN {toxref}.effect on tg_effect.effect_id=effect.effect_id\
+        JOIN {toxref}.endpoint on effect.endpoint_id=endpoint.endpoint_id\
+        WHERE effect_profile_group_id=2 and study_id is null\
+        GROUP BY dsstox_substance_id,\
+        casrn,preferred_name,pod_type,qualifier,pod_value,pod_unit,mg_kg_day_value,\
+        dose_level,max_dose_level,group_name,endpoint_category,pod.pod_id;".format(**databases)
