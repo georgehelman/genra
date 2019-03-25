@@ -18,7 +18,7 @@ def getFP(SID,fp='chm_mrgn',FP=None,DB=None,fill=None):
                      'dsstox_sid':{'$in':SID}}
             },
             # Include these fields
-            {'$project':{'dsstox_sid':1,'name':1,'_id':0,
+            {'$project':{'dsstox_sid':1,'_id':0,
                         'fp':'$%s.ds'%ds},
             },
             # Unwind the fp 
@@ -37,7 +37,7 @@ def getFP(SID,fp='chm_mrgn',FP=None,DB=None,fill=None):
 
     if R.shape[0]==0 or R.shape[1]==0: return pd.DataFrame()
 
-    return pd.pivot_table(R,index=['dsstox_sid'],columns='fp',values='name',aggfunc=len,fill_value=fill)
+    return pd.pivot_table(R,index=['dsstox_sid'],columns='fp',aggfunc=len,fill_value=fill)
 
 def getChemBioSummary(SID,col=None,ds=None,fill=None,cls='fp'):
     if not cls: cls='fp'

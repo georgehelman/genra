@@ -86,3 +86,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+#Old modules
+lib/old
