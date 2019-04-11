@@ -13,10 +13,14 @@ def query_mysql(connection,query):
         ret=ret[0]
     return ret
 
-def query_mongo(db,query_dict,result_dict,limit=0):
+def query_mongo(db,query_dict,result_dict=False,limit=0):
     #Result dict specifies desired return fields
     # limit=0 equivalent to no limit
-    return list(db.find(query_dict, result_dict).limit(limit))
+    # If necessary because Pymongo does not observe MongoDB convention that empty result dict returns whole record, instead returns only _id
+    if result_dict:
+        return list(db.find(query_dict, result_dict).limit(limit))
+    else:
+        return list(db.find(query_dict).limit(limit))
 
 
 def load_record(database,record,log_db=None):
