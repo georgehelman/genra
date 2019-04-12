@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.js"></script>
+</head>
+<body>
+
+</body>
+<script src="static/svg2png.js"></script>
+<script>
+    var target="DTXSID2029612";
+    var neighbors='DTXSID1020778,DTXSID2025975,DTXSID6021327,DTXSID0035744,DTXSID8029600,DTXSID4021717,DTXSID9034496,DTXSID8020759,DTXSID7021780,DTXSID6032649'
+    d3.json("/graph/?target="+target+'&neighbors='+neighbors,function(data){
+        W=data.W;
+        H=data.H;
+        var svg = d3.select("body")
+                .append("svg")
+                .attr("width",W)
+                .attr('height',H);
+
+        //Nodes
+        nodes=data.nodes;
+//        for(i=0;i<nodes.length;i++){
+//            node=nodes[i];
+//            svg.append("svg:image")
+//                    .attr("xlink:href","/substance/?sid="+node.dsstox_sid)
+//                    .attr('x',node.v_img_x)
+//                    .attr('y',node.v_img_y)
+//                    .attr('width',node.v_img_w)
+//                    .attr('height',node.v_img_h)
+//        }
+        //Edges
+        svg.selectAll("line")
+                .data(data.edges)
+                .enter()
+                .append("line")
+                .attr("x1",function(e){return e.xi})
+                .attr("y1",function(e){return e.yi})
+                .attr("x2",function(e){return e.xb})
+                .attr("y2",function(e){return e.yb})
+                .style("stroke-width",1)
+                .style("stroke","#999999");
+
+        svg.selectAll('circle')
+                .data(data.nodes)
+                .enter()
+                .append('circle')
+                .attr("cx",function(n){return n.v_x})
+                .attr("cy",function(n){return n.v_y})
+                .attr("r",function(n){return n.v_img_w})
+                .style("stroke-width",0)
+                .style("fill","#ffffff");
+
+        lr=15;
+        svg.selectAll(".edge_circle")
+                .data(data.edges)
+                .enter()
+                .append("circle")
+                .attr("cx",function(e){return e.lx})
+                .attr("cy",function(e){return e.ly})
+                .attr("r",lr)
+                .style("stroke-width",0)
+                .style("fill", "#ffffff");
+
+        svg.selectAll(".edge_text")
+                .data(data.edges)
+                .enter()
+                .append("text")
+                .attr("x",function(e){return e.lx})
+                .attr("y",function(e){return e.ly})
+                .style("fill","#ff5656")
+                .text(function(e){return e.label})
+                .style("text-anchor","middle")
+                .style("alignment-baseline","central")
+                .attr("font-size",14);
+
+        svg.selectAll(".neighbor")
+                .data(data.nodes)
+                .enter()
+                .append("svg:image")
+                .attr("xlink:href",function(n){return "/substance/?sid="+n.dsstox_sid})
+                .attr('x',function(n){return n.v_img_x})
+                .attr('y',function(n){return n.v_img_y})
+                .attr('width',function(n){return n.v_img_w})
+                .attr('height',function(n){return n.v_img_h});
+
+        svg.selectAll('.node_text')
+                .data(data.nodes)
+                .enter()
+                .append("text")
+                .attr("x",function(n){return n.v_img_x+n.v_img_w*.5})
+                .attr("y",function(n){return n.v_img_y+n.v_img_h})
+                .attr("font-size",16)
+                .style("fill","1111ff")
+                .text(function(n){return n.name})
+                .style("text-anchor","middle");
+
+        svg_string=getSVGString(svg.node());
+        svgString2Image(svg_string,600,600);
+    });
+
+</script>
+</html>

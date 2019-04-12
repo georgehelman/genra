@@ -56,6 +56,7 @@ lib - This folder contains all of the user-defined modules used by the notebooks
 	bio - pertains to the creation of biological fingerprints
 	utl - includes shell utilities and MySQL queries
 scripts - Scripts for updating the MongoDB databases. These can be executed by cronjobs.
+services - Related web services
 
 # Help
 
