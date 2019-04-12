@@ -89,3 +89,6 @@ ENV/
 
 #Old modules
 lib/old
+
+#Idea
+.idea

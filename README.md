@@ -44,6 +44,18 @@ unix> jupyter notebook
 
 After you have completed the above steps open [this page](http://localhost:7777) in your browser to run different steps of the analysis. The machine learning analysis given in "organ-tox-ml.ipynb", the impact of different factors on F1 performance is given in "organ-tox-stats.ipynb", and the code for reproducing all figures / tables is given in "organ-tox-figs.ipynb".
 
+#Directory structure
+
+notebooks - This folder contains all of the notebooks related to the project. It is loosely organized into subdirectories based on subject matter
+	db - pertains to MongoDB ETL operations
+	rax - pertains to GenRA analyses
+lib - This folder contains all of the user-defined modules used by the notebooks. The modules are loosely organized into subdirectories based on the subject matter
+	db - pertains to MongoDB ETL operations
+	rax - pertains to GenRA hazard prediction 
+	chm - pertains to the creation of chemical fingerprints
+	bio - pertains to the creation of biological fingerprints
+	utl - includes shell utilities and MySQL queries
+scripts - Scripts for updating the MongoDB databases. These can be executed by cronjobs.
 
 # Help
 
