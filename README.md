@@ -58,6 +58,8 @@ lib - This folder contains all of the user-defined modules used by the notebooks
 scripts - Scripts for updating the MongoDB databases. These can be executed by cronjobs.
 services - Related web services
 
+Note: Many notebooks refer to data and fig folders. These are not included in the project as they are too large in size. The notebooks will create these folders at the root directory of the project if they do not already exist.
+
 # Help
 
 Contact shah.imran@epa.gov
